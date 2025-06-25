@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <PackageId>Messaging.Messengers</PackageId>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>Messengers</AssemblyName>
+        <RootNamespace>Messengers</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Messages\Messages.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Common.JsonSerialization" Version="1.0.6" />
+      <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.19.0" />
+      <PackageReference Include="Azure.Storage.Queues" Version="12.22.0" />
+    </ItemGroup>
+
+</Project>

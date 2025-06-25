@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <PackageId>Messaging.Dispatchers</PackageId>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Dispatchers</RootNamespace>
+        <AssemblyName>Dispatchers</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Handlers\Handlers.csproj" />
+      <ProjectReference Include="..\Messages\Messages.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Common.JsonSerialization" Version="1.0.6" />
+        <PackageReference Include="Observability.Logging.Serilog" Version="1.0.3" />
+        <PackageReference Include="Observability.Logging.TestingUtilities" Version="1.0.3" />
+        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.19.0" />
+        <PackageReference Include="Azure.Storage.Queues" Version="12.22.0" />
+    </ItemGroup>
+
+</Project>

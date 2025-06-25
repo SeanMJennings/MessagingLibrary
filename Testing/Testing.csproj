@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Common.JsonSerialization" Version="1.0.6" />
+      <PackageReference Include="Testing.Bdd" Version="1.0.3" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+      <PackageReference Include="Moq" Version="4.20.72" />
+      <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+      <PackageReference Include="Testcontainers.Azurite" Version="4.4.0" />
+      <PackageReference Include="Testcontainers.ServiceBus" Version="4.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Handlers\Handlers.csproj" />
+      <ProjectReference Include="..\Messengers\Messengers.csproj" />
+      <ProjectReference Include="..\Dispatchers\Dispatchers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Handlers\MessageHandlerSteps.cs">
+        <DependentUpon>MessageHandlerShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messaging\ServiceBus\ServiceBusCommandSenderSteps.cs">
+        <DependentUpon>ServiceBusCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messaging\ServiceBus\ServiceBusEventPublisherSteps.cs">
+        <DependentUpon>ServiceBusEventPublisherShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messaging\StorageAccountQueue\StorageAccountQueueCommandSenderSteps.cs">
+        <DependentUpon>StorageAccountQueueCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Handlers\ServiceBus\ServiceBusMessageDispatcherSteps.cs">
+        <DependentUpon>ServiceBusMessageDispatcherShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messagers\ServiceBus\ServiceBusCommandSenderSteps.cs">
+        <DependentUpon>ServiceBusCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messagers\ServiceBus\ServiceBusEventPublisherSteps.cs">
+        <DependentUpon>ServiceBusEventPublisherShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messengers\StorageAccountQueue\StorageAccountQueueCommandSenderSteps.cs">
+        <DependentUpon>StorageAccountQueueCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Receivers\ServiceBus\ServiceBusMessageReceiverSteps.cs">
+        <DependentUpon>ServiceBusMessageReceiverShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Receivers\StorageAccount\StorageAccountQueueMessageReceiverSteps.cs">
+        <DependentUpon>StorageAccountQueueMessageReceiverShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messengers\ServiceBus\ServiceBusCommandSenderSteps.cs">
+        <DependentUpon>ServiceBusCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messengers\ServiceBus\ServiceBusEventPublisherSteps.cs">
+        <DependentUpon>ServiceBusEventPublisherShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Dispatchers\ServiceBus\ServiceBusMessageDispatcherSteps.cs">
+        <DependentUpon>ServiceBusMessageDispatcherShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Dispatchers\StorageAccount\StorageAccountQueueMessageDispatcherSteps.cs">
+        <DependentUpon>StorageAccountQueueMessageDispatcherShould.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+    
+</Project>
