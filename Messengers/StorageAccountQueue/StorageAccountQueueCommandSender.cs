@@ -10,15 +10,12 @@ public interface IAmAStorageAccountQueueCommandSender
 
 public sealed class StorageAccountQueueCommandSender : IAmAStorageAccountQueueCommandSender
 {
-    private QueueClient QueueClient;
+    private readonly QueueClient QueueClient;
     
     private StorageAccountQueueCommandSender(QueueClient queueClient)
     {
         QueueClient = queueClient;
-        if (!QueueClient.Exists().Value)
-        {
-            QueueClient.CreateIfNotExists();
-        }
+        if (!QueueClient.Exists().Value) QueueClient.CreateIfNotExists();
     }
     
     public static StorageAccountQueueCommandSender New(string connectionString, string queueName)

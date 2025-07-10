@@ -10,17 +10,17 @@ public interface IAmAServiceBusCommandSender
 
 public sealed class ServiceBusCommandSender : IAmAServiceBusCommandSender
 {
-    private string queueName;
-    private ServiceBusClient client;
+    private readonly ServiceBusSender sender;
     
+    // async constructors are not supported.
     internal ServiceBusCommandSender(string connectionString, string queueName, IAmAServiceBusAdministrationClientWrapper serviceBusAdministrationClient)
     {
-        this.queueName = queueName;
-        client = new ServiceBusClient(connectionString);
+        var client = new ServiceBusClient(connectionString);
         if (!serviceBusAdministrationClient.QueueExistsAsync(queueName).GetAwaiter().GetResult())
         {
             serviceBusAdministrationClient.CreateQueueAsync(queueName).Wait();
         }
+        sender = client.CreateSender(queueName);
     }
     
     public static ServiceBusCommandSender New(string connectionString, string queueName)
@@ -30,7 +30,6 @@ public sealed class ServiceBusCommandSender : IAmAServiceBusCommandSender
     
     public Task SendToQueue<T>(T theCommand) where T : Command
     { 
-        var sender = client.CreateSender(queueName);
         return sender.SendMessageAsync(new ServiceBusMessage(JsonSerialization.Serialize(theCommand)));
     }
 }

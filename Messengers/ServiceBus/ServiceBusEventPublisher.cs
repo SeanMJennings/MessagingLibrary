@@ -10,17 +10,17 @@ public interface IAmAServiceBusEventPublisher
 
 public sealed class ServiceBusEventPublisher : IAmAServiceBusEventPublisher
 {
-    private string topicName;
-    private ServiceBusClient client;
+    private readonly ServiceBusSender sender;
     
+    // async constructors are not supported.
     internal ServiceBusEventPublisher(string connectionString, string topicName, IAmAServiceBusAdministrationClientWrapper serviceBusAdministrationClient)
     {
-        this.topicName = topicName;
-        client = new ServiceBusClient(connectionString);
+        var client = new ServiceBusClient(connectionString);
         if (!serviceBusAdministrationClient.TopicExistsAsync(topicName).GetAwaiter().GetResult())
         {
             serviceBusAdministrationClient.CreateTopicAsync(topicName).Wait();
         }
+        sender = client.CreateSender(topicName);
     }
     
     public static ServiceBusEventPublisher New(string connectionString, string topicName)
@@ -30,7 +30,6 @@ public sealed class ServiceBusEventPublisher : IAmAServiceBusEventPublisher
     
     public Task PublishToTopic<T>(T theEvent) where T : Event
     { 
-        var sender = client.CreateSender(topicName);
         return sender.SendMessageAsync(new ServiceBusMessage(JsonSerialization.Serialize(theEvent)));
     }
 }

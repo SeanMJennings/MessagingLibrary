@@ -14,4 +14,8 @@ A message handler is responsible for processing the message and invoking the app
 
 [See this article for command vs event explanation](https://medium.com/@shahrukhkhan_7802/action-and-reaction-understanding-commands-and-events-in-system-design-7bc346604c4a)
 
+This library ensures messaging systems are always provisioned.
+Create and re-use a single instance of a sender/publisher etc for performance.
+Extremely high throughput may require removal of provisioning checks for performance for short-lived clients.
+
 ![Command vs Event](https://github.com/SeanMJennings/MessagingLibrary/blob/master/CommandsVsEvents.png?raw=true)
