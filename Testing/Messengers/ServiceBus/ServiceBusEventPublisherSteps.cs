@@ -44,6 +44,7 @@ public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSp
         serviceBusMock = new Mock<IAmAServiceBus>();
         serviceBusMock.Setup(s => s.CreateTopicIfNotExistsAsync(DefaultTopicName));
         client = new ServiceBusClient(ServiceBusContainer.GetConnectionString());
+        serviceBusMock.Setup(s => s.CreateSender(DefaultTopicName)).Returns(client.CreateSender(DefaultTopicName));
         processor = client.CreateProcessor(DefaultTopicName, DefaultSubscriptionName);
     }
     

@@ -42,6 +42,7 @@ public partial class ServiceBusCommandSenderShould : AzureServiceBusContainerSpe
         serviceBusMock = new Mock<IAmAServiceBus>();
         serviceBusMock.Setup(s => s.CreateQueueIfNotExistsAsync(DefaultQueueName));
         client = new ServiceBusClient(ServiceBusContainer.GetConnectionString());
+        serviceBusMock.Setup(s => s.CreateSender(DefaultQueueName)).Returns(client.CreateSender(DefaultQueueName));
         receiver = client.CreateReceiver(DefaultQueueName);
     }
     
