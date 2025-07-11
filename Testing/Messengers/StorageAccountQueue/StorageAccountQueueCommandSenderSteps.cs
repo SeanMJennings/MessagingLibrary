@@ -9,7 +9,7 @@ namespace Testing.Messengers.StorageAccountQueue;
 public partial class StorageAccountQueueCommandSenderShould : AzuriteContainerSpecification
 {
     private readonly Guid correlationId = Guid.NewGuid();
-    private const string QueueName = "test-queue";
+    private const string QueueName = "default";
     private ACommand theCommand = null!;
     private class ACommand(string correlationId) : Command(correlationId, CommandTypes.ACommand);
     private enum CommandTypes
