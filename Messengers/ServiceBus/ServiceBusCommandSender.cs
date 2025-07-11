@@ -12,7 +12,7 @@ public sealed class ServiceBusCommandSender : IAmAServiceBusCommandSender
 {
     private readonly ServiceBusSender sender;
     
-    private ServiceBusCommandSender(string queueName, IAmAServiceBus serviceBus)
+    internal ServiceBusCommandSender(string queueName, IAmAServiceBus serviceBus)
     {
         sender = serviceBus.CreateSender(queueName);
     }
@@ -25,5 +25,31 @@ public sealed class ServiceBusCommandSender : IAmAServiceBusCommandSender
     public Task SendToQueue<T>(T theCommand) where T : Command
     { 
         return sender.SendMessageAsync(new ServiceBusMessage(JsonSerialization.Serialize(theCommand)));
+    }
+}
+
+public sealed class ServiceBusCommandSenderFactory
+{
+    private readonly ServiceBus serviceBus;
+    
+    internal ServiceBusCommandSenderFactory(ServiceBus serviceBus)
+    {
+        this.serviceBus = serviceBus;
+    }
+
+    public ServiceBusCommandSenderFactory(string connectionString)
+    {
+        serviceBus = ServiceBus.New(connectionString);
+    }
+
+    public async Task<ServiceBusCommandSender> CreateServiceBusCommandSenderEnsuringQueueExists(string queueName)
+    {
+        await serviceBus.CreateQueueIfNotExistsAsync(queueName);
+        return new ServiceBusCommandSender(queueName, serviceBus);
+    }    
+    
+    public ServiceBusCommandSender CreateServiceBusCommandSender(string queueName)
+    {
+        return new ServiceBusCommandSender(queueName, serviceBus);
     }
 }
