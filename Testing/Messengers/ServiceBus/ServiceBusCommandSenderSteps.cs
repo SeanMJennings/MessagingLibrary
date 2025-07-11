@@ -3,18 +3,16 @@ using Azure.Messaging.ServiceBus;
 using BDD;
 using Messages;
 using Messengers.ServiceBus;
-using Moq;
 using Shouldly;
 
 namespace Testing.Messengers.ServiceBus;
 
 public partial class ServiceBusCommandSenderShould : AzureServiceBusContainerSpecification
 {
-    private Guid correlationId = Guid.NewGuid();
+    private readonly Guid correlationId = Guid.NewGuid();
     private const string TheCommandProperty = "wibble";
     private DoSomething theCommand = null!;
     private const string DefaultQueueName = "queue.1";
-    private Mock<IAmAServiceBusAdministrationClientWrapper> serviceBusAdministrationClientMock = null!;
     private ServiceBusClient client = null!;
     private ServiceBusReceiver receiver = null!;
     private ServiceBusCommandSender commandSender = null!;
@@ -39,10 +37,6 @@ public partial class ServiceBusCommandSenderShould : AzureServiceBusContainerSpe
     {
         base.before_each();
         theCommand = null!;
-        serviceBusAdministrationClientMock = new Mock<IAmAServiceBusAdministrationClientWrapper>();
-        serviceBusAdministrationClientMock.Setup(s => s.QueueExistsAsync(DefaultQueueName))
-            .ReturnsAsync(false);
-        serviceBusAdministrationClientMock.Setup(s => s.CreateQueueAsync(DefaultQueueName));
         client = new ServiceBusClient(ServiceBusContainer.GetConnectionString());
         receiver = client.CreateReceiver(DefaultQueueName);
     }
@@ -54,17 +48,9 @@ public partial class ServiceBusCommandSenderShould : AzureServiceBusContainerSpe
         base.after_each();
     }
     
-    private static void a_service_bus_with_no_queues(){}
-
     private void creating_the_service_bus_sender()
     {
-        commandSender = new ServiceBusCommandSender(ServiceBusContainer.GetConnectionString(), DefaultQueueName, serviceBusAdministrationClientMock.Object);
-    }
-
-    private void the_queue_is_created()
-    {
-        serviceBusAdministrationClientMock.Verify(x => x.QueueExistsAsync(DefaultQueueName), Times.Once);
-        serviceBusAdministrationClientMock.Verify(x => x.CreateQueueAsync(DefaultQueueName), Times.Once);
+        commandSender = ServiceBusCommandSender.New(ServiceBusContainer.GetConnectionString(), DefaultQueueName);
     }
 
     private void a_command()
@@ -81,10 +67,10 @@ public partial class ServiceBusCommandSenderShould : AzureServiceBusContainerSpe
     private void command_is_sent_to_service_bus_queue()
     {
         var receivedMessage = receiver.ReceiveMessageAsync().Await();
-        receivedMessage.Body.ToString().ShouldContain(Wibble.Wobble.ToString());
+        receivedMessage.Body.ToString().ShouldContain(nameof(Wibble.Wobble));
         var receivedCommand = JsonSerializer.Deserialize<DoSomething>(receivedMessage.Body.ToString());
         receivedCommand!.CorrelationId.ShouldBe(correlationId.ToString());
-        receivedCommand.Type.ShouldBe(CommandTypes.DoSomething.ToString());
+        receivedCommand.Type.ShouldBe(nameof(CommandTypes.DoSomething));
         receivedCommand.CommandProperty.ShouldBe(TheCommandProperty);
         receivedCommand.Wobble.ShouldBe(Wibble.Wobble);
     }

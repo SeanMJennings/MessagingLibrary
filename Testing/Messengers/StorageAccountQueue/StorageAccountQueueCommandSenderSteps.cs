@@ -23,8 +23,6 @@ public partial class StorageAccountQueueCommandSenderShould : AzuriteContainerSp
         theCommand = null!;
     }
     
-    private static void a_storage_account_with_no_queues() {}
-    
     private void a_command_to_send_to_queue()
     {
         theCommand = new ACommand(correlationId.ToString());
@@ -36,17 +34,6 @@ public partial class StorageAccountQueueCommandSenderShould : AzuriteContainerSp
         sender.SendToQueue(theCommand).Await();
     }    
     
-    private void creating_the_storage_account_command_sender()
-    {
-        StorageAccountQueueCommandSender.New(AzuriteContainer.GetConnectionString(), QueueName);
-    }
-
-    private void the_queue_is_created()
-    {
-        var queueClient = new QueueClient(AzuriteContainer.GetConnectionString(), QueueName);
-        queueClient.Exists().Value.ShouldBeTrue();
-    }
-
     private void the_command_is_sent_to_queue()
     {
         var queueClient = new QueueClient(AzuriteContainer.GetConnectionString(), QueueName);

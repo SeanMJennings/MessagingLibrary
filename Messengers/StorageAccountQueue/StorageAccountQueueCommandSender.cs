@@ -15,7 +15,6 @@ public sealed class StorageAccountQueueCommandSender : IAmAStorageAccountQueueCo
     private StorageAccountQueueCommandSender(QueueClient queueClient)
     {
         QueueClient = queueClient;
-        if (!QueueClient.Exists().Value) QueueClient.CreateIfNotExists();
     }
     
     public static StorageAccountQueueCommandSender New(string connectionString, string queueName)

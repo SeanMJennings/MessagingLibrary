@@ -12,20 +12,14 @@ public sealed class ServiceBusEventPublisher : IAmAServiceBusEventPublisher
 {
     private readonly ServiceBusSender sender;
     
-    // async constructors are not supported.
-    internal ServiceBusEventPublisher(string connectionString, string topicName, IAmAServiceBusAdministrationClientWrapper serviceBusAdministrationClient)
+    private ServiceBusEventPublisher(string topicName, IAmAServiceBus serviceBus)
     {
-        var client = new ServiceBusClient(connectionString);
-        if (!serviceBusAdministrationClient.TopicExistsAsync(topicName).GetAwaiter().GetResult())
-        {
-            serviceBusAdministrationClient.CreateTopicAsync(topicName).Wait();
-        }
-        sender = client.CreateSender(topicName);
+        sender = serviceBus.CreateSender(topicName);
     }
     
     public static ServiceBusEventPublisher New(string connectionString, string topicName)
     {
-        return new ServiceBusEventPublisher(connectionString, topicName, ServiceBusAdministrationClientWrapper.New(connectionString));
+        return new ServiceBusEventPublisher(topicName, ServiceBus.New(connectionString));
     }
     
     public Task PublishToTopic<T>(T theEvent) where T : Event

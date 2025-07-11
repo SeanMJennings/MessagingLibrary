@@ -3,19 +3,17 @@ using Azure.Messaging.ServiceBus;
 using BDD;
 using Messages;
 using Messengers.ServiceBus;
-using Moq;
 using Shouldly;
 
 namespace Testing.Messengers.ServiceBus;
 
 public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSpecification
 {
-    private Guid correlationId = Guid.NewGuid();
+    private readonly Guid correlationId = Guid.NewGuid();
     private const string TheEventProperty = "wibble";
     private SomethingHasHappened theEvent = null!;
     private const string DefaultTopicName = "topic.1";
     private const string DefaultSubscriptionName = "subscription.1";
-    private Mock<IAmAServiceBusAdministrationClientWrapper> serviceBusAdministrationClientMock = null!;
     private ServiceBusClient client = null!;
     private ServiceBusProcessor processor = null!;
     private ServiceBusEventPublisher eventPublisher = null!;
@@ -41,10 +39,6 @@ public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSp
     {
         base.before_each();
         theEvent = null!;
-        serviceBusAdministrationClientMock = new Mock<IAmAServiceBusAdministrationClientWrapper>();
-        serviceBusAdministrationClientMock.Setup(s => s.QueueExistsAsync(DefaultTopicName))
-            .ReturnsAsync(false);
-        serviceBusAdministrationClientMock.Setup(s => s.CreateQueueAsync(DefaultTopicName));
         client = new ServiceBusClient(ServiceBusContainer.GetConnectionString());
         processor = client.CreateProcessor(DefaultTopicName, DefaultSubscriptionName);
     }
@@ -56,17 +50,9 @@ public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSp
         base.after_each();
     }
     
-    private static void a_service_bus_with_no_topics(){}
-
     private void creating_the_service_bus_sender()
     {
-        eventPublisher = new ServiceBusEventPublisher(ServiceBusContainer.GetConnectionString(), DefaultTopicName, serviceBusAdministrationClientMock.Object);
-    }
-
-    private void the_topic_is_created()
-    {
-        serviceBusAdministrationClientMock.Verify(x => x.TopicExistsAsync(DefaultTopicName), Times.Once);
-        serviceBusAdministrationClientMock.Verify(x => x.CreateTopicAsync(DefaultTopicName), Times.Once);
+        eventPublisher = ServiceBusEventPublisher.New(ServiceBusContainer.GetConnectionString(), DefaultTopicName);
     }
 
     private void an_event()
@@ -91,10 +77,10 @@ public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSp
 
     private Task receive_and_assert_message(ProcessMessageEventArgs processMessageEventArgs)
     {
-        processMessageEventArgs.Message.Body.ToString().ShouldContain(Wibble.Wobble.ToString());
+        processMessageEventArgs.Message.Body.ToString().ShouldContain(nameof(Wibble.Wobble));
         var receivedEvent = JsonSerializer.Deserialize<SomethingHasHappened>(processMessageEventArgs.Message.Body.ToString())!;
         receivedEvent.CorrelationId.ShouldBe(correlationId.ToString());
-        receivedEvent.Type.ShouldBe(EventTypes.SomethingHasHappened.ToString());
+        receivedEvent.Type.ShouldBe(nameof(EventTypes.SomethingHasHappened));
         receivedEvent.EventProperty.ShouldBe(TheEventProperty);
         receivedEvent.Wobble.ShouldBe(Wibble.Wobble);
         return Task.CompletedTask;
