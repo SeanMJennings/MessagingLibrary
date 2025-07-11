@@ -30,9 +30,9 @@ public sealed class ServiceBusEventPublisher : IAmAServiceBusEventPublisher
 
 public sealed class ServiceBusEventPublisherFactory
 {
-    private readonly ServiceBus serviceBus;
+    private readonly IAmAServiceBus serviceBus;
     
-    internal ServiceBusEventPublisherFactory(ServiceBus serviceBus)
+    internal ServiceBusEventPublisherFactory(IAmAServiceBus serviceBus)
     {
         this.serviceBus = serviceBus;
     }

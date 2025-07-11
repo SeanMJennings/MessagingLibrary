@@ -30,9 +30,9 @@ public sealed class ServiceBusCommandSender : IAmAServiceBusCommandSender
 
 public sealed class ServiceBusCommandSenderFactory
 {
-    private readonly ServiceBus serviceBus;
+    private readonly IAmAServiceBus serviceBus;
     
-    internal ServiceBusCommandSenderFactory(ServiceBus serviceBus)
+    internal ServiceBusCommandSenderFactory(IAmAServiceBus serviceBus)
     {
         this.serviceBus = serviceBus;
     }

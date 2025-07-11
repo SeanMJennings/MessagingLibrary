@@ -3,6 +3,7 @@ using Azure.Messaging.ServiceBus;
 using BDD;
 using Messages;
 using Messengers.ServiceBus;
+using Moq;
 using Shouldly;
 
 namespace Testing.Messengers.ServiceBus;
@@ -14,6 +15,7 @@ public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSp
     private SomethingHasHappened theEvent = null!;
     private const string DefaultTopicName = "topic.1";
     private const string DefaultSubscriptionName = "subscription.1";
+    private Mock<IAmAServiceBus> serviceBusMock = null!;
     private ServiceBusClient client = null!;
     private ServiceBusProcessor processor = null!;
     private ServiceBusEventPublisher eventPublisher = null!;
@@ -39,6 +41,8 @@ public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSp
     {
         base.before_each();
         theEvent = null!;
+        serviceBusMock = new Mock<IAmAServiceBus>();
+        serviceBusMock.Setup(s => s.CreateTopicIfNotExistsAsync(DefaultTopicName));
         client = new ServiceBusClient(ServiceBusContainer.GetConnectionString());
         processor = client.CreateProcessor(DefaultTopicName, DefaultSubscriptionName);
     }
@@ -50,9 +54,17 @@ public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSp
         base.after_each();
     }
     
-    private void creating_the_service_bus_sender()
+    private static void a_service_bus_with_no_topics(){}
+
+    private void creating_the_service_bus_event_publisher_using_a_factory()
     {
-        eventPublisher = ServiceBusEventPublisher.New(ServiceBusContainer.GetConnectionString(), DefaultTopicName);
+        eventPublisher = new ServiceBusEventPublisherFactory(serviceBusMock.Object)
+            .CreateServiceBusEventPublisherEnsuringTopicExists(DefaultTopicName).Await();
+    }
+
+    private void the_topic_is_created()
+    {
+        serviceBusMock.Verify(x => x.CreateTopicIfNotExistsAsync(DefaultTopicName), Times.Once);
     }
 
     private void an_event()
@@ -62,7 +74,7 @@ public partial class ServiceBusEventPublisherShould : AzureServiceBusContainerSp
 
     private void publishing_event_to_service_bus_topic()
     {
-        creating_the_service_bus_sender();
+        eventPublisher = new ServiceBusEventPublisher(DefaultTopicName, serviceBusMock.Object);
         eventPublisher.PublishToTopic(theEvent).Await();
     }
 
