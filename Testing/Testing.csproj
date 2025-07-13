@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="Common.JsonSerialization" Version="1.0.6" />
+      <PackageReference Include="Observability.Logging.TestingUtilities" Version="1.0.16" />
       <PackageReference Include="Testing.Bdd" Version="1.0.3" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
       <PackageReference Include="Moq" Version="4.20.72" />
