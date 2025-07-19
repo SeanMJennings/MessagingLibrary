@@ -1,8 +1,8 @@
 ﻿namespace Messages;
 
-public abstract class Event(string correlationId, Enum type) : IAmAMessage
+public abstract record Event(string CorrelationId, Enum type) : IAmAMessageWithType
 {
-    public string CorrelationId { get; } = correlationId;
-    
     public string Type => type.ToString();
 }
+
+public interface IAmAnEvent : IAmAMessage;

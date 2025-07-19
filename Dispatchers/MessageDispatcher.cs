@@ -11,7 +11,7 @@ public abstract class MessageDispatcher<E>(Dictionary<E, IAmAMessageHandler> enu
     protected async Task Handle(BinaryData binaryData, Func<Task> completeMessage, Func<string, Exception, Task> abandonMessage)
     {
         var startTime = DateTime.UtcNow;
-        IAmAMessage? message = null;
+        IAmAMessageWithType? message = null;
         try
         {
             var messageType = DeserializeAndRetrieveMessageEnum(binaryData);
@@ -35,12 +35,12 @@ public abstract class MessageDispatcher<E>(Dictionary<E, IAmAMessageHandler> enu
         return messageEnumType;
     }    
     
-    private IAmAMessage DeserializeAndRetrieveMessage(JsonElement json, E messageEnumType)
+    private IAmAMessageWithType DeserializeAndRetrieveMessage(JsonElement json, E messageEnumType)
     {
         ValidateHandlerRegistered(messageEnumType);
         var handler = enumToHandlerMappings[messageEnumType];
         var theMessageClassType = handler.GetMessageType();
-        var message = (IAmAMessage)JsonSerialization.Deserialize(json.ToString(), theMessageClassType)!;
+        var message = (IAmAMessageWithType)JsonSerialization.Deserialize(json.ToString(), theMessageClassType)!;
         return message;
     }
 
@@ -66,7 +66,7 @@ public abstract class MessageDispatcher<E>(Dictionary<E, IAmAMessageHandler> enu
 
     private static void TryParseMessageType(JsonElement messageJson, out E messageType)
     {
-        if (Enum.TryParse(typeof(E), messageJson.GetProperty(nameof(IAmAMessage.Type)).ToString(), out var parsedMessageType))
+        if (Enum.TryParse(typeof(E), messageJson.GetProperty(nameof(IAmAMessageWithType.Type)).ToString(), out var parsedMessageType))
         {
             messageType = (E)parsedMessageType;
             return;
