@@ -4,15 +4,15 @@ namespace Handlers;
 
 public interface IAmAMessageHandler
 {
-    public Task HandleMessage(IAmAMessageWithType messageWithType);
+    public Task HandleMessage(IAmAMessage message);
     public Type GetMessageType();
 }
 
-public abstract class MessageHandler<T> : IAmAMessageHandler where T : IAmAMessageWithType
+public abstract class MessageHandler<T> : IAmAMessageHandler where T : IAmAMessage
 {
-    public async Task HandleMessage(IAmAMessageWithType messageWithType)
+    public async Task HandleMessage(IAmAMessage message)
     {
-        if (messageWithType is not T concreteMessage) throw new ArgumentException("Message is not of the expected type", nameof(messageWithType));
+        if (message is not T concreteMessage) throw new ArgumentException("Message is not of the expected type", nameof(message));
         await Handle(concreteMessage);
     }
     protected abstract Task Handle(T message);

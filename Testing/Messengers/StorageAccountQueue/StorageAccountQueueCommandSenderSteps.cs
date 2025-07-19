@@ -12,7 +12,7 @@ public partial class StorageAccountQueueCommandSenderShould : AzuriteContainerSp
     private const string QueueName = "test-queue";
     private const string QueueThatDoesNotExistName = "test-queue-2";
     private ACommand theCommand = null!;
-    private record ACommand(string CorrelationId) : Command(CorrelationId, CommandTypes.ACommand);
+    private class ACommand(string correlationId) : Command(correlationId, CommandTypes.ACommand);
     private enum CommandTypes
     {
         ACommand

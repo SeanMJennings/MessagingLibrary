@@ -11,8 +11,8 @@ namespace Testing.Dispatchers;
 public class CommonSteps : Specification
 {
     protected readonly Guid CorrelationId = Guid.NewGuid();
-    protected IAmAMessageWithType TheCommand = null!;
-    private IAmAMessageWithType capturedMessageWithType = null!;
+    protected IAmAMessage TheCommand = null!;
+    private IAmAMessage CapturedMessage = null!;
     protected List<string> CapturedLogMessages = null!;
     private Exception CapturedLogException = null!;
     private AlertCode CapturedAlertCode;
@@ -25,24 +25,28 @@ public class CommonSteps : Specification
         Wubble
     }
 
-    private record DoSomething(string CorrelationId, Wibble Wibble) : Command(CorrelationId, CommandTypes.DoSomething)
+    private class DoSomething(string correlationId, Wibble wibble) : Command(correlationId, CommandTypes.DoSomething)
     {
         public string SomethingImportant = "wibble";
+        public Wibble Wibble = wibble;
     }
 
-    private record DoAnotherSomething(string CorrelationId, Wibble Wibble) : Command(CorrelationId, CommandTypes.DoAnotherSomething)
+    private class DoAnotherSomething(string correlationId, Wibble wibble) : Command(correlationId, CommandTypes.DoAnotherSomething)
     {
         public string SomethingImportant = "wibble";
+        public Wibble Wibble = wibble;
     }
 
-    private record DoSomethingElse(string CorrelationId, Wibble Wibble) : Command(CorrelationId, CommandTypes.DoSomethingElse)
+    private class DoSomethingElse(string correlationId, Wibble wibble) : Command(correlationId, CommandTypes.DoSomethingElse)
     {
         public string SomethingImportant = "wibble";
+        public Wibble Wibble = wibble;
     }
 
-    private record DoSomethingUnexpected(string CorrelationId, Wibble Wibble) : Command(CorrelationId, UnknownCommandTypes.DoSomethingUnexpected)
+    private class DoSomethingUnexpected(string correlationId, Wibble wibble) : Command(correlationId, UnknownCommandTypes.DoSomethingUnexpected)
     {
         public string SomethingImportant = "wibble";
+        public Wibble Wibble = wibble;
     }
 
     protected enum CommandTypes
@@ -78,11 +82,11 @@ public class CommonSteps : Specification
     {
         base.before_each();
         TheCommand = null!;
-        capturedMessageWithType = null!;
+        CapturedMessage = null!;
         CapturedLogMessages = [];
         CapturedLogException = null!;
         CapturedAlertCode = default;
-        TheHandler = new DoSomethingHandler(message => capturedMessageWithType = message);
+        TheHandler = new DoSomethingHandler(message => CapturedMessage = message);
         AnotherHandler = new DoAnotherSomethingHandler();
         
         LoggingMocker.SetupLoggingInfoMock((theMessage, _) =>
@@ -119,16 +123,16 @@ public class CommonSteps : Specification
     
     protected void the_message_is_handled()
     {
-        capturedMessageWithType.CorrelationId.ShouldBe(TheCommand.CorrelationId);
-        capturedMessageWithType.ShouldBeOfType<DoSomething>();
-        capturedMessageWithType.Type.ShouldBe(CommandTypes.DoSomething.ToString());
-        ((DoSomething)capturedMessageWithType).SomethingImportant.ShouldBe("wibble");
-        ((DoSomething)capturedMessageWithType).Wibble.ShouldBe(Wibble.Wobble);
+        CapturedMessage.CorrelationId.ShouldBe(TheCommand.CorrelationId);
+        CapturedMessage.ShouldBeOfType<DoSomething>();
+        CapturedMessage.Type.ShouldBe(CommandTypes.DoSomething.ToString());
+        ((DoSomething)CapturedMessage).SomethingImportant.ShouldBe("wibble");
+        ((DoSomething)CapturedMessage).Wibble.ShouldBe(Wibble.Wobble);
     }
     
     protected void the_message_is_not_handled()
     {
-        capturedMessageWithType.ShouldBeNull();
+        CapturedMessage.ShouldBeNull();
     }
 
     protected void the_message_is_logged_as_received()
