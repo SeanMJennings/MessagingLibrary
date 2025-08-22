@@ -1,6 +1,6 @@
 # Messaging
 
-Dotnet packages for messaging with services such as Azure Storage queues. I'm generally using MassTransit now for services like Azure Service Bus.
+Messaging with services such as Azure Storage queues available as dotnet libraries. I'm generally using MassTransit now for services like Azure Service Bus.
 
 A command is a message sent directly to a queue with the language DoSomething. A command sender knows and cares where the command is going. 
 A command recipient describes the shape of the command they respond to. A command recipient should publish a nuget package containing the command class.
