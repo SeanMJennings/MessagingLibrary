@@ -54,6 +54,12 @@
       <Compile Update="Receivers\StorageAccount\StorageAccountQueueMessageReceiverSteps.cs">
         <DependentUpon>StorageAccountQueueMessageReceiverShould.cs</DependentUpon>
       </Compile>
+      <Compile Update="Messengers\ServiceBus\ServiceBusCommandSenderSteps.cs">
+        <DependentUpon>ServiceBusCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messengers\ServiceBus\ServiceBusEventPublisherSteps.cs">
+        <DependentUpon>ServiceBusEventPublisherShould.cs</DependentUpon>
+      </Compile>
       <Compile Update="Dispatchers\ServiceBus\ServiceBusMessageDispatcherSteps.cs">
         <DependentUpon>ServiceBusMessageDispatcherShould.cs</DependentUpon>
       </Compile>
