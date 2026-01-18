@@ -27,26 +27,26 @@ public class CommonSteps : Specification
 
     private class DoSomething(string correlationId, Wibble wibble) : Command(correlationId, CommandTypes.DoSomething)
     {
-        public string SomethingImportant = "wibble";
-        public Wibble Wibble = wibble;
+        public string SomethingImportant { get; } = "wibble";
+        public Wibble Wibble { get; } = wibble;
     }
 
     private class DoAnotherSomething(string correlationId, Wibble wibble) : Command(correlationId, CommandTypes.DoAnotherSomething)
     {
-        public string SomethingImportant = "wibble";
-        public Wibble Wibble = wibble;
+        public string SomethingImportant { get; } = "wibble";
+        public Wibble Wibble { get; } = wibble;
     }
 
     private class DoSomethingElse(string correlationId, Wibble wibble) : Command(correlationId, CommandTypes.DoSomethingElse)
     {
-        public string SomethingImportant = "wibble";
-        public Wibble Wibble = wibble;
+        public string SomethingImportant { get; set; } = "wibble";
+        public Wibble Wibble { get; set; } = wibble;
     }
 
     private class DoSomethingUnexpected(string correlationId, Wibble wibble) : Command(correlationId, UnknownCommandTypes.DoSomethingUnexpected)
     {
-        public string SomethingImportant = "wibble";
-        public Wibble Wibble = wibble;
+        public string SomethingImportant { get; set; } = "wibble";
+        public Wibble Wibble { get; set; } = wibble;
     }
 
     protected enum CommandTypes
