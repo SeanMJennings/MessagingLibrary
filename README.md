@@ -8,7 +8,7 @@ A command recipient describes the shape of the command they respond to. A comman
 An event is a message published to a topic and has the language SomethingHasHappened. An event publisher does not care or know about who receives the event. 
 An event publisher describes the shape of the event and should publish a nuget package containing the event class.
 
-A message dispatcher is responsible for taking a message from a source (queue or topic-subscription) and selecting the right message handler to invoke. The message dispatcher will then mark the message as succeeded or failed. For Azure Storage Account Queues, the dispatcher is responsible for deciding what to do on repeated failure.
+A message dispatcher is responsible for taking a message from a source (queue or topic-subscription) and selecting the right message handler to invoke. The message dispatcher will then mark the message as succeeded or failed. For Azure Service Bus, the messaging infrastructure will decide if the message requeues on failure. For Azure Storage Account Queues, the dispatcher is responsible for deciding what to do on repeated failure.
 
 A message handler is responsible for processing the message and invoking the application logic.
 
