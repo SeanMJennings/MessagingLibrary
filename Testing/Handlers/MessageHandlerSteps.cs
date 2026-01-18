@@ -10,7 +10,7 @@ public partial class MessageHandlerShould : Specification
     private readonly Guid correlationId = Guid.NewGuid();
     private Guid capturedCorrelationId = Guid.Empty;
     private ACommand theCommand = null!;
-    public record ACommand(string CorrelationId) : Command(CorrelationId, CommandTypes.ACommand);
+    public class ACommand(string correlationId) : Command(correlationId, CommandTypes.ACommand);
     public enum CommandTypes
     {
         ACommand

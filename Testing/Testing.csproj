@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <PackageReference Include="Common.JsonSerialization" Version="1.0.6" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
       <PackageReference Include="Observability.Logging.TestingUtilities" Version="1.0.16" />
       <PackageReference Include="Testing.Bdd" Version="1.0.3" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
@@ -28,23 +27,44 @@
       <Compile Update="Handlers\MessageHandlerSteps.cs">
         <DependentUpon>MessageHandlerShould.cs</DependentUpon>
       </Compile>
+      <Compile Update="Messaging\ServiceBus\ServiceBusCommandSenderSteps.cs">
+        <DependentUpon>ServiceBusCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messaging\ServiceBus\ServiceBusEventPublisherSteps.cs">
+        <DependentUpon>ServiceBusEventPublisherShould.cs</DependentUpon>
+      </Compile>
       <Compile Update="Messaging\StorageAccountQueue\StorageAccountQueueCommandSenderSteps.cs">
         <DependentUpon>StorageAccountQueueCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Handlers\ServiceBus\ServiceBusMessageDispatcherSteps.cs">
+        <DependentUpon>ServiceBusMessageDispatcherShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messagers\ServiceBus\ServiceBusCommandSenderSteps.cs">
+        <DependentUpon>ServiceBusCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messagers\ServiceBus\ServiceBusEventPublisherSteps.cs">
+        <DependentUpon>ServiceBusEventPublisherShould.cs</DependentUpon>
       </Compile>
       <Compile Update="Messengers\StorageAccountQueue\StorageAccountQueueCommandSenderSteps.cs">
         <DependentUpon>StorageAccountQueueCommandSenderShould.cs</DependentUpon>
       </Compile>
+      <Compile Update="Receivers\ServiceBus\ServiceBusMessageReceiverSteps.cs">
+        <DependentUpon>ServiceBusMessageReceiverShould.cs</DependentUpon>
+      </Compile>
       <Compile Update="Receivers\StorageAccount\StorageAccountQueueMessageReceiverSteps.cs">
         <DependentUpon>StorageAccountQueueMessageReceiverShould.cs</DependentUpon>
       </Compile>
+      <Compile Update="Messengers\ServiceBus\ServiceBusCommandSenderSteps.cs">
+        <DependentUpon>ServiceBusCommandSenderShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Messengers\ServiceBus\ServiceBusEventPublisherSteps.cs">
+        <DependentUpon>ServiceBusEventPublisherShould.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Dispatchers\ServiceBus\ServiceBusMessageDispatcherSteps.cs">
+        <DependentUpon>ServiceBusMessageDispatcherShould.cs</DependentUpon>
+      </Compile>
       <Compile Update="Dispatchers\StorageAccount\StorageAccountQueueMessageDispatcherSteps.cs">
         <DependentUpon>StorageAccountQueueMessageDispatcherShould.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Messengers\CommandSenderSteps.cs">
-        <DependentUpon>CommandSenderShould.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Messengers\EventPublisherSteps.cs">
-        <DependentUpon>EventPublisherShould.cs</DependentUpon>
       </Compile>
     </ItemGroup>
     
