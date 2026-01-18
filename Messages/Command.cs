@@ -1,8 +1,8 @@
 ﻿namespace Messages;
 
-public abstract class Command(string correlationId, Enum type) : IAmAMessage
+public abstract record Command(string CorrelationId, Enum type) : IAmAMessageWithType
 {
-    public string CorrelationId { get; } = correlationId;
-
     public string Type => type.ToString();
 }
+
+public interface IAmACommand : IAmAMessage;
