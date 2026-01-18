@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+      <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Common.JsonSerialization" Version="1.0.11" />
+      <PackageReference Include="Common.JsonSerialization" Version="1.0.12" />
       <PackageReference Include="Observability.Logging.TestingUtilities" Version="1.0.21" />
       <PackageReference Include="Testing.Bdd" Version="1.0.11" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
